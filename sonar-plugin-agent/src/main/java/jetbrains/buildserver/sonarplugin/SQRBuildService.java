@@ -49,28 +49,45 @@ public class SQRBuildService extends CommandLineBuildService {
             getRunnerContext().addEnvironmentVariable("JAVA_HOME", jdkHome);
         }
 
-        final String sonarScannerRoot = getSonarScannerRoot();
-        if (sonarScannerRoot == null) {
-            throw new RunBuildException("No SonarQube Scanner selected");
+        boolean doSonar = false;
+        for (String arg : programArgs) {
+            if (arg.startsWith("-Dsonar.projectKey=")) {
+                String projectKey = arg.substring("-Dsonar.projectKey=".length());
+                if (projectKey.length() > 0) {
+                    doSonar = true;
+                }
+                break;
+            }
         }
-        final List<String> programArgs = composeSQRArgs(getRunnerContext().getRunnerParameters(), getBuild().getSharedConfigParameters(), sonarScannerRoot);
+        ProgramCommandLine build
+        if(doSonar) {
+            final String sonarScannerRoot = getSonarScannerRoot();
+            if (sonarScannerRoot == null) {
+                throw new RunBuildException("No SonarQube Scanner selected");
+            }
+            final List<String> programArgs = composeSQRArgs(getRunnerContext().getRunnerParameters(), getBuild().getSharedConfigParameters(), sonarScannerRoot);
 
-        final boolean useScanner = isUseScannerMain(sonarScannerRoot);
-        final JavaCommandLineBuilder builder = new JavaCommandLineBuilder();
+            final boolean useScanner = isUseScannerMain(sonarScannerRoot);
+            final JavaCommandLineBuilder builder = new JavaCommandLineBuilder();
 
-        final ProgramCommandLine build = builder.withClassPath(getClasspath())
-                .withMainClass(getMainClass(useScanner))
-                .withJavaHome(jdkHome)
-                .withBaseDir(getBuild().getCheckoutDirectory().getAbsolutePath())
-                .withEnvVariables(getRunnerContext().getBuildParameters().getEnvironmentVariables())
-                .withJvmArgs(JavaRunnerUtil.extractJvmArgs(getRunnerContext().getRunnerParameters()))
-                .withClassPath(getClasspath())
-                .withProgramArgs(programArgs)
-                .withWorkingDir(getRunnerContext().getWorkingDirectory().getAbsolutePath()).build();
+            build = builder.withClassPath(getClasspath())
+                    .withMainClass(getMainClass(useScanner))
+                    .withJavaHome(jdkHome)
+                    .withBaseDir(getBuild().getCheckoutDirectory().getAbsolutePath())
+                    .withEnvVariables(getRunnerContext().getBuildParameters().getEnvironmentVariables())
+                    .withJvmArgs(JavaRunnerUtil.extractJvmArgs(getRunnerContext().getRunnerParameters()))
+                    .withClassPath(getClasspath())
+                    .withProgramArgs(programArgs)
+                    .withWorkingDir(getRunnerContext().getWorkingDirectory().getAbsolutePath()).build();
 
-        getLogger().message("Starting SQS from " + sonarScannerRoot);
-        for (String str : build.getArguments()) {
-            getLogger().message(str);
+            getLogger().message("Starting SQS from " + sonarScannerRoot);
+            for (String str : build.getArguments()) {
+                getLogger().message(str);
+            }
+        }else{
+            programArgs.clear()
+            programArgs.add("Sonar runner is ignored because projectKey is not defined");
+            build = new SimpleProgramCommandLine(getRunnerContext(), "echo", programArgs);
         }
 
         return build;
