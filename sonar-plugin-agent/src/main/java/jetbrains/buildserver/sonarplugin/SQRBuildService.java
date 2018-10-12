@@ -61,7 +61,7 @@ public class SQRBuildService extends CommandLineBuildService {
         for (String arg : programArgs) {
             if (arg.startsWith("-Dsonar.projectKey=")) {
                 String projectKey = arg.substring("-Dsonar.projectKey=".length());
-                if (projectKey.length() > 0) {
+                if (!projectKey.isEmpty()) {
                     doSonar = true;
                 }
                 break;
