@@ -16,22 +16,6 @@
                 <artifactId>maven-install-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>org.jetbrains.teamcity:common-tools</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                        <configuration>
-                            <groupId>org.jetbrains.teamcity</groupId>
-                            <artifactId>common-tools</artifactId>
-                            <version>2017.1</version>
-                            <packaging>jar</packaging>
-                            <file>${basedir}/lib/common-tools.jar</file>
-                            <createChecksum>true</createChecksum>
-                            <generatePom>true</generatePom>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>org.jetbrains.teamcity:server-tools</id>
                         <phase>validate</phase>
                         <goals>
@@ -47,6 +31,70 @@
                             <generatePom>true</generatePom>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>org.jetbrains.teamcity:server-api</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>org.jetbrains.teamcity</groupId>
+                            <artifactId>server-api</artifactId>
+                            <version>2017.1</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/server-api.jar</file>
+                            <createChecksum>true</createChecksum>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>org.jetbrains.teamcity:common-api</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>org.jetbrains.teamcity</groupId>
+                            <artifactId>common-api</artifactId>
+                            <version>2017.1</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/common-api.jar</file>
+                            <createChecksum>true</createChecksum>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                    </execution> 
+                    <execution>
+                        <id>org.jetbrains.teamcity:openapi</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>org.jetbrains.teamcity</groupId>
+                            <artifactId>openapi</artifactId>
+                            <version>2017.1</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/openapi.jar</file>
+                            <createChecksum>true</createChecksum>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>org.jetbrains.teamcity:serviceMessages</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>org.jetbrains.teamcity</groupId>
+                            <artifactId>serviceMessages</artifactId>
+                            <version>2017.1</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/serviceMessages.jar</file>
+                            <createChecksum>true</createChecksum>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                    </execution>                                                    
                 </executions>
             </plugin>
         </plugins>

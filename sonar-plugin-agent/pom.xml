@@ -31,6 +31,27 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+        <groupId>org.jetbrains</groupId>
+        <artifactId>annotations</artifactId>
+        <version>13.0</version>
+        <scope>provided</scope>         
+    </dependency>
+    
+    <dependency>
+        <groupId>org.jetbrains.teamcity</groupId>
+        <artifactId>openapi</artifactId>
+        <version>2017.1</version>
+        <scope>provided</scope>    
+    </dependency>
+
+    <dependency>
+        <groupId>org.jetbrains.teamcity</groupId>
+        <artifactId>serviceMessages</artifactId>
+        <version>2017.1</version>
+        <scope>provided</scope>    
+    </dependency>
+
   </dependencies>
   <build>
     <pluginManagement>

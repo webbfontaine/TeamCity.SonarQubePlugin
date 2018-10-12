@@ -9,6 +9,7 @@ import jetbrains.buildServer.runner.JavaRunnerConstants;
 import jetbrains.buildServer.util.OSType;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildserver.sonarplugin.sqrunner.tool.SonarQubeScannerConstants;
+import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +50,13 @@ public class SQRBuildService extends CommandLineBuildService {
             getRunnerContext().addEnvironmentVariable("JAVA_HOME", jdkHome);
         }
 
+        final String sonarScannerRoot = getSonarScannerRoot();
+        if (sonarScannerRoot == null) {
+            throw new RunBuildException("No SonarQube Scanner selected");
+        }
+
+        final List<String> programArgs = composeSQRArgs(getRunnerContext().getRunnerParameters(), getBuild().getSharedConfigParameters(), sonarScannerRoot);
+
         boolean doSonar = false;
         for (String arg : programArgs) {
             if (arg.startsWith("-Dsonar.projectKey=")) {
@@ -59,14 +67,9 @@ public class SQRBuildService extends CommandLineBuildService {
                 break;
             }
         }
-        ProgramCommandLine build
-        if(doSonar) {
-            final String sonarScannerRoot = getSonarScannerRoot();
-            if (sonarScannerRoot == null) {
-                throw new RunBuildException("No SonarQube Scanner selected");
-            }
-            final List<String> programArgs = composeSQRArgs(getRunnerContext().getRunnerParameters(), getBuild().getSharedConfigParameters(), sonarScannerRoot);
 
+        ProgramCommandLine build = null;
+        if(doSonar) {
             final boolean useScanner = isUseScannerMain(sonarScannerRoot);
             final JavaCommandLineBuilder builder = new JavaCommandLineBuilder();
 
@@ -84,8 +87,8 @@ public class SQRBuildService extends CommandLineBuildService {
             for (String str : build.getArguments()) {
                 getLogger().message(str);
             }
-        }else{
-            programArgs.clear()
+        } else {
+            programArgs.clear();
             programArgs.add("Sonar runner is ignored because projectKey is not defined");
             build = new SimpleProgramCommandLine(getRunnerContext(), "echo", programArgs);
         }
