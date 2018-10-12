@@ -3,6 +3,26 @@
  */
 
 SonarPlugin = {
+    initPage: function () {
+        var $pf = $j(".runnerFormTable input[id='sonar.password_field']");
+        $pf.click(function () {
+            $pf.val("");
+            $pf.attr("data-modified", "modified");
+        }).keydown(function () {
+            $pf.attr("data-modified", "modified");
+        });
+        var $pjf = $j(".runnerFormTable input[id='sonar.jdbc.password_field']");
+        $pjf.click(function () {
+            $pjf.val("");
+            $pjf.attr("data-modified", "modified");
+        }).keydown(function () {
+            $pf.attr("data-modified", "modified");
+        });
+        $j(".enableDatabaseSettings").click(function () {
+            $j(".databaseSettings").show();
+            $j(".enableDatabaseSettings").hide();
+        });
+    },
     encryptPassword: function(pass) {
         return BS.Encrypt.encryptData(pass, $j('#publicKey').val());
     },
@@ -57,6 +77,13 @@ SonarPlugin = {
             $j(".runnerFormTable input[id='sonar.jdbc.username']").val(data.JDBCUsername);
             $j(".runnerFormTable input[id='sonar.jdbc.password']").val(data.JDBCPassword);
             $j(".runnerFormTable input[id='sonar.jdbc.password_field']").val(data.JDBCPassword ? "*****" : "" );
+            if (data.JDBCUrl || data.JDBCUsername || data.JDBCPassword) {
+                $j(".runnerFormTable .databaseSettings").show();
+                $j(".enableDatabaseSettings").hide();
+            } else {
+                $j(".runnerFormTable .databaseSettings").hide();
+                $j(".enableDatabaseSettings").show();
+            }
             $j("#serverInfoForm input[id='projectId']").val(data.projectId);
 
             this.cleanErrors();
